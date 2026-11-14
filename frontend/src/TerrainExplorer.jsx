@@ -172,7 +172,7 @@ export default function TerrainExplorer({ onBack }) {
             <FitImage />
 
             <ImageOverlay
-              url="/data/jezero-ctx.png"
+              url={`${import.meta.env.BASE_URL}data/jezero-ctx.png`}
               bounds={imageBounds}
               opacity={1}
             />
