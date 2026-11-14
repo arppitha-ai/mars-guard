@@ -1,0 +1,816 @@
+/* MARS GUARD SURVIVAL MONITOR */
+
+.survival-page {
+  min-height: 100vh;
+  padding: 0 5%;
+  background: #101522;
+  color: #f1f4fa;
+  font-family: inherit;
+}
+
+/* TOP NAVIGATION */
+
+.survival-nav {
+  min-height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #29354a;
+}
+
+.survival-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ff8656;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.survival-brand strong {
+  color: #f3f5fa;
+}
+
+.survival-nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.survival-nav-links a {
+  color: #c0cadb;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.survival-nav-links a:hover {
+  color: #ff9865;
+}
+
+.survival-demo-badge,
+.simulation-badge {
+  padding: 10px 15px;
+  border: 1px solid #66513b;
+  border-radius: 25px;
+  background: #332c23;
+  color: #ffc078;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* PAGE HEADER */
+
+.survival-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 42px 0 35px;
+}
+
+.survival-header h1 {
+  color: #ff895c;
+  font-size: 28px;
+  margin: 10px 0;
+}
+
+.survival-header p {
+  color: #a8b5ca;
+  font-size: 14px;
+}
+
+.survival-breadcrumb,
+.section-kicker {
+  color: #91a5c0 !important;
+  font-size: 11px !important;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+/* LOCATION SELECTOR */
+
+.location-selector {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 18px;
+  align-items: center;
+  padding: 30px;
+  margin-bottom: 22px;
+  border: 1px solid #303d53;
+  border-radius: 14px;
+  background: #1c273a;
+}
+
+.location-selector h2 {
+  margin: 8px 0;
+  font-size: 22px;
+}
+
+.location-selector p {
+  color: #a8b5ca;
+  font-size: 13px;
+}
+
+.location-selector select {
+  min-width: 220px;
+  padding: 14px;
+  border: 1px solid #ff895c;
+  border-radius: 8px;
+  background: #151f30;
+  color: #ff9865;
+  font-size: 13px;
+}
+
+.location-description {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-top: 15px;
+  border-top: 1px solid #354258;
+  color: #ff9865;
+}
+
+.location-description div {
+  display: grid;
+  gap: 5px;
+}
+
+.location-description small {
+  color: #a8b5ca;
+}
+
+/* NASA GALLERY */
+
+.nasa-gallery {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 28px;
+  margin-bottom: 25px;
+  border: 1px solid #303d53;
+  border-radius: 14px;
+  background: #1c293d;
+}
+
+.nasa-gallery h2 {
+  margin: 10px 0;
+  font-size: 21px;
+}
+
+.nasa-gallery p {
+  color: #bdc8d8;
+  font-size: 13px;
+}
+
+.nasa-gallery a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  background: #ff8956;
+  color: #171c27;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.nasa-gallery a:hover {
+  background: #ffab82;
+}
+
+/* OVERVIEW */
+
+.survival-overview {
+  margin-bottom: 25px;
+}
+
+.overview-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 22px;
+  margin-bottom: 20px;
+  background: #1c273a;
+  border: 1px solid #303d53;
+  border-radius: 12px;
+}
+
+.overview-heading h2 {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.overview-heading p {
+  color: #a8b5ca;
+  font-size: 13px;
+  margin: 0;
+}
+
+.refresh-button,
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border: 1px solid #42516a;
+  border-radius: 8px;
+  background: #172337;
+  color: #e5edf8;
+  cursor: pointer;
+}
+
+.refresh-button:hover {
+  border-color: #ff9865;
+}
+
+.survival-error {
+  padding: 12px;
+  border-radius: 8px;
+  background: #442d2b;
+  color: #ffb18b;
+  font-size: 12px;
+}
+
+/* METRIC CARDS */
+
+.survival-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.survival-card {
+  min-width: 0;
+  padding: 22px;
+  border: 1px solid #303d53;
+  border-radius: 13px;
+  background: #1c273a;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.survival-card:hover {
+  transform: translateY(-4px);
+  border-color: #ff9865;
+}
+
+.survival-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  margin-bottom: 23px;
+}
+
+.temperature {
+  color: #ff9865;
+  background: #492c24;
+}
+
+.radiation {
+  color: #d6a1ff;
+  background: #352747;
+}
+
+.pressure {
+  color: #5bb9ff;
+  background: #193651;
+}
+
+.oxygen {
+  color: #56e3aa;
+  background: #193a34;
+}
+
+.wind {
+  color: #79c7ff;
+  background: #193651;
+}
+
+.metric-title {
+  min-height: 30px;
+  color: #9cacc4;
+  font-size: 10px;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
+
+.survival-card h2 {
+  margin: 12px 0;
+  color: #f5f7fb;
+  font-size: 27px;
+  overflow-wrap: anywhere;
+}
+
+.survival-card h2 span {
+  display: inline-block;
+  margin-left: 5px;
+  color: #aab8cb;
+  font-size: 11px;
+}
+
+.metric-status {
+  margin-top: 15px;
+  color: #ff9865;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* MISSION SAFETY DECISION */
+
+.mission-decision {
+  padding: 28px;
+  margin: 25px 0;
+  border: 1px solid #6c4643;
+  border-radius: 14px;
+  background: #1c273a;
+}
+
+.decision-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.decision-top h2 {
+  font-size: 21px;
+  margin: 10px 0;
+}
+
+.decision-status {
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.mission-decision.danger {
+  border-color: #b34c4c;
+}
+
+.danger .decision-status {
+  background: #582b32;
+  color: #ff8585;
+}
+
+.mission-decision.warning {
+  border-color: #a47b3f;
+}
+
+.warning .decision-status {
+  background: #4b3a25;
+  color: #ffc66e;
+}
+
+.mission-decision.safe {
+  border-color: #35866c;
+}
+
+.safe .decision-status {
+  background: #1d493b;
+  color: #70e5b2;
+}
+
+.mission-decision > h3 {
+  margin: 25px 0 10px;
+  color: #ff806a;
+  font-size: 29px;
+}
+
+.mission-decision > p {
+  color: #b5c1d3;
+  font-size: 14px;
+}
+
+.recommended-action {
+  display: grid;
+  gap: 12px;
+  padding: 20px;
+  margin: 22px 0 14px;
+  border-radius: 10px;
+  background: #131d2c;
+}
+
+.recommended-action span {
+  color: #ff9865;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.recommended-action strong {
+  color: #f1f4fa;
+  font-size: 16px;
+}
+
+.mission-decision > small {
+  color: #91a5c0;
+  font-size: 10px;
+}
+
+/* ENVIRONMENTAL HISTORY */
+
+.history-section {
+  margin-bottom: 25px;
+}
+
+.history-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.history-heading h2 {
+  margin: 0 0 7px;
+  font-size: 21px;
+}
+
+.history-heading p {
+  color: #a8b5ca;
+  font-size: 13px;
+}
+
+.history-heading > span {
+  padding: 9px 13px;
+  border-radius: 7px;
+  background: #352747;
+  color: #d6a1ff;
+  font-size: 10px;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.chart-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid #303d53;
+  border-radius: 13px;
+  background: #1c273a;
+}
+
+.chart-card h3 {
+  font-size: 17px;
+  margin: 0 0 8px;
+}
+
+.chart-card > p {
+  color: #9eacc2;
+  font-size: 12px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 280px;
+  margin-top: 20px;
+}
+
+/* ALERTS */
+
+.alert-section {
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #303d53;
+  border-radius: 13px;
+  background: #1c273a;
+}
+
+.alert-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.alert-heading h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+
+.alert-heading h2 svg {
+  color: #ffad55;
+}
+
+.alert-heading p {
+  color: #9eacc2;
+  font-size: 12px;
+}
+
+.alert-heading > span {
+  padding: 9px 13px;
+  border-radius: 6px;
+  background: #482e2b;
+  color: #ff9879;
+  font-size: 11px;
+}
+
+.alert-list {
+  display: grid;
+  gap: 12px;
+}
+
+.alert-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 17px;
+  padding: 18px;
+  border: 1px solid #35435a;
+  border-radius: 9px;
+  background: #172337;
+}
+
+.alert-level {
+  min-width: 85px;
+  padding: 8px;
+  text-align: center;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.alert-level.critical {
+  color: #ff8585;
+  background: #542d34;
+}
+
+.alert-level.high {
+  color: #ffb36e;
+  background: #503b29;
+}
+
+.alert-level.warning {
+  color: #f1ca75;
+  background: #493e2c;
+}
+
+.alert-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.alert-card p {
+  margin: 0;
+  color: #a8b5ca;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.no-alerts {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 8px;
+  background: #1d493b;
+  color: #70e5b2;
+}
+
+/* RECOMMENDATIONS */
+
+.recommendation-section {
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 1px solid #303d53;
+  border-radius: 13px;
+  background: #1c273a;
+}
+
+.recommendation-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 23px;
+  color: #ff9865;
+}
+
+.recommendation-heading h2 {
+  margin: 0 0 8px;
+  color: #f1f4fa;
+  font-size: 20px;
+}
+
+.recommendation-heading p {
+  margin: 0;
+  color: #9eacc2;
+  font-size: 12px;
+}
+
+.recommendation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.recommendation-card {
+  padding: 21px;
+  border: 1px solid #35435a;
+  border-radius: 10px;
+  background: #172337;
+}
+
+.recommendation-card > span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.recommendation-card h3 {
+  margin: 13px 0;
+  font-size: 16px;
+}
+
+.recommendation-card p {
+  color: #a8b5ca;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.critical-action {
+  border-left: 4px solid #ff5757;
+}
+
+.critical-action span {
+  color: #ff8585;
+}
+
+.high-action {
+  border-left: 4px solid #ff9865;
+}
+
+.high-action span {
+  color: #ff9865;
+}
+
+.warning-action {
+  border-left: 4px solid #e6bb63;
+}
+
+.warning-action span {
+  color: #e6bb63;
+}
+
+/* DEMONSTRATION CONTROLS */
+
+.controls-section {
+  padding: 26px;
+  margin-bottom: 30px;
+  border: 1px solid #303d53;
+  border-radius: 13px;
+  background: #1c273a;
+}
+
+.controls-section h2 {
+  margin: 0 0 10px;
+  font-size: 21px;
+}
+
+.controls-section > p {
+  margin-bottom: 28px;
+  color: #a8b5ca;
+  font-size: 13px;
+}
+
+.slider-control {
+  margin-bottom: 25px;
+}
+
+.slider-control label {
+  display: block;
+  margin-bottom: 13px;
+  color: #ffad85;
+  font-size: 14px;
+}
+
+.slider-control input {
+  width: 100%;
+  accent-color: #ff8656;
+  cursor: pointer;
+}
+
+.reset-readings {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #ff8656;
+  color: #171c27;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.reset-readings:hover {
+  background: #ffab82;
+}
+
+/* FOOTER */
+
+.survival-footer {
+  padding: 25px 0;
+  border-top: 1px solid #29354a;
+  text-align: center;
+  color: #8595ad;
+  font-size: 11px;
+  line-height: 2;
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1100px) {
+  .survival-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 800px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .survival-nav-links {
+    gap: 14px;
+  }
+
+  .survival-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .survival-page {
+    padding: 0 17px;
+  }
+
+  .survival-nav {
+    padding: 16px 0;
+    flex-wrap: wrap;
+  }
+
+  .survival-nav-links {
+    width: 100%;
+    justify-content: space-between;
+    order: 3;
+  }
+
+  .survival-header h1 {
+    font-size: 23px;
+  }
+
+  .location-selector {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .location-selector select {
+    width: 100%;
+  }
+
+  .survival-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-decision > h3 {
+    font-size: 23px;
+  }
+
+  .recommendation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .alert-card {
+    flex-direction: column;
+  }
+
+  .chart-container {
+    height: 240px;
+  }
+
+  .nasa-gallery {
+    padding: 20px;
+  }
+}
+
+.chart-container { height: 300px; min-height: 300px; width: 100%; }
+.chart-card { overflow: hidden; }
