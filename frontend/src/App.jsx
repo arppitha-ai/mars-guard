@@ -93,7 +93,7 @@ function MarsMap({ route, destination, onSelectDestination }) {
       <MapClickHandler onSelect={onSelectDestination} />
 
       <ImageOverlay
-        url="/data/jezero-ctx.png"
+        url={`${import.meta.env.BASE_URL}data/jezero-ctx.png`}
         bounds={[
           [0, 0],
           [100, 100],
