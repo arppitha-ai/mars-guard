@@ -33,6 +33,7 @@ import {
 } from "lucide-react";
 
 import { NasaPhoto } from "./NasaPhoto";
+import MarsAtlas from "./MarsAtlas";
 import SurvivalMonitor from "./SurvivalMonitor";
 import TerrainExplorer from "./TerrainExplorer";
 
@@ -727,6 +728,7 @@ function HazardGuide() {
 const TABS = [
   ["navigator", "Route Navigator"],
   ["terrain", "Terrain Explorer"],
+  ["atlas", "Mars Atlas"],
   ["survival", "Survival Monitor"],
   ["analytics", "Route Analytics"],
 ];
@@ -829,6 +831,10 @@ function App() {
       {page}
     </>
   );
+
+  if (activeModule === "atlas") {
+    return withNav(<MarsAtlas />);
+  }
 
   if (activeModule === "survival") {
     return withNav(<SurvivalMonitor onBack={() => setActiveModule("navigator")} />);
