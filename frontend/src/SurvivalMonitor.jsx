@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "./api";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -75,7 +76,7 @@ function SurvivalMonitor({ onBack }) {
       setError("");
 
       const response = await fetch(
-        "http://127.0.0.1:5000/api/survival"
+        `${API_BASE_URL}/api/survival`
       );
 
       if (!response.ok) {
