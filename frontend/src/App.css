@@ -737,3 +737,6 @@ button, select {
     font-size: 8px;
   }
 }
+/* map fills the card instead of a fixed small box */
+.map-wrapper { height: clamp(440px, 64vh, 720px); }
+@media (max-width: 900px) { .terrain-layout { grid-template-columns: 1fr !important; } }

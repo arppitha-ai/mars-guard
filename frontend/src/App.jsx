@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "./api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { findRoute, hazards, START_LOCATION } from "./pathfinding";
 import L from "leaflet";
 
 import {
@@ -9,6 +9,7 @@ import {
   Polyline,
   Polygon,
   Tooltip,
+  useMap,
   useMapEvents,
 } from "react-leaflet";
 
@@ -41,15 +42,8 @@ import "./App.css";
 // CONSTANTS
 // ==========================================
 
-const START_LOCATION = [12, 12];
 const DEFAULT_DESTINATION = [85, 85];
 
-const hazards = [
-  { name: "Rock formation", type: "High", position: [72, 30] },
-  { name: "Impact crater", type: "Critical", position: [45, 72] },
-  { name: "Steep slope", type: "Medium", position: [24, 44] },
-  { name: "Rock cluster", type: "High", position: [82, 65] },
-];
 
 // ==========================================
 // MAP CLICK HANDLER
@@ -70,6 +64,25 @@ function MapClickHandler({ onSelect }) {
   return null;
 }
 
+// Fit the 100x100 image to the container (it used to render at 100px)
+function FitMap() {
+  const map = useMap();
+  useEffect(() => {
+    const bounds = [[0, 0], [100, 100]];
+    const fit = () => {
+      map.invalidateSize();
+      map.setMinZoom(-5);
+      map.fitBounds(bounds, { animate: false });
+      map.setMinZoom(map.getZoom());
+    };
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(map.getContainer());
+    return () => ro.disconnect();
+  }, [map]);
+  return null;
+}
+
 // ==========================================
 // MARS MAP
 // ==========================================
@@ -79,9 +92,10 @@ function MarsMap({ route, destination, onSelectDestination }) {
     <MapContainer
       crs={L.CRS.Simple}
       center={[50, 50]}
-      zoom={0}
-      minZoom={-1}
-      maxZoom={2}
+      zoom={2}
+      zoomSnap={0.25}
+      minZoom={0}
+      maxZoom={5}
       maxBounds={[
         [-10, -10],
         [110, 110],
@@ -91,6 +105,7 @@ function MarsMap({ route, destination, onSelectDestination }) {
       attributionControl={false}
       className="mars-map"
     >
+      <FitMap />
       <MapClickHandler onSelect={onSelectDestination} />
 
       <ImageOverlay
@@ -366,7 +381,7 @@ function RouteAnalytics({
               }}
             >
               {routeInfo
-                ? "Displaying results from the Python A* pathfinding algorithm."
+                ? "Displaying results from the A* pathfinding algorithm."
                 : "Calculate a route in Route Navigator to see its analytics here."}
             </p>
           </div>
@@ -605,7 +620,7 @@ function RouteAnalytics({
           </p>
 
           <p>
-            <strong>Backend:</strong> Python Flask
+            <strong>Engine:</strong> Client-side JavaScript
           </p>
 
           <p>
@@ -663,6 +678,24 @@ function RouteAnalytics({
 // MAIN APPLICATION
 // ==========================================
 
+const TABS = [
+  ["navigator", "Route Navigator"],
+  ["terrain", "Terrain Explorer"],
+  ["survival", "Survival Monitor"],
+  ["analytics", "Route Analytics"],
+];
+
+function TopNav({ active, onChange }) {
+  return (
+    <nav style={{ position: "sticky", top: 0, zIndex: 2000, display: "flex", gap: 8, flexWrap: "wrap", padding: "10px 20px", background: "#0b1220", borderBottom: "1px solid #26364d" }}>
+      <strong style={{ color: "#e87545", marginRight: 12, alignSelf: "center" }}>MARSGUARD</strong>
+      {TABS.map(([key, label]) => (
+        <button key={key} onClick={() => onChange(key)} style={{ padding: "8px 14px", borderRadius: 8, cursor: "pointer", color: "#fff", border: "1px solid #30415b", background: key === active ? "#e87545" : "#172235" }}>{label}</button>
+      ))}
+    </nav>
+  );
+}
+
 function App() {
   const [activeModule, setActiveModule] = useState("navigator");
 
@@ -682,6 +715,10 @@ function App() {
 
   const [routeCalculated, setRouteCalculated] = useState(false);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeModule]);
+
   // ========================================
   // CALCULATE ROUTE USING FLASK BACKEND
   // ========================================
@@ -694,40 +731,9 @@ function App() {
     setRouteCalculated(false);
 
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/route`,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            start: START_LOCATION,
-            destination,
-            priority,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-            data.message ||
-            "Route calculation failed."
-        );
-      }
-
-      if (data.status !== "success") {
-        throw new Error(
-          data.message ||
-            "No route could be calculated."
-        );
-      }
-
+      await new Promise((r) => setTimeout(r, 350));
+      const data = findRoute(START_LOCATION, destination, priority);
+      if (data.status !== "success") throw new Error(data.message);
       setRoute(data.route);
       setRouteInfo(data);
       setRouteCalculated(true);
@@ -735,9 +741,7 @@ function App() {
       console.error("Route calculation error:", err);
 
       setError(
-        err.message === "Failed to fetch"
-          ? "Cannot connect to Python backend. Check that Flask is running on port 5000."
-          : err.message
+        err.message
       );
     } finally {
       setLoading(false);
@@ -773,30 +777,23 @@ function App() {
   // MODULE NAVIGATION
   // ========================================
 
+  const withNav = (page) => (
+    <>
+      <TopNav active={activeModule} onChange={setActiveModule} />
+      {page}
+    </>
+  );
+
   if (activeModule === "survival") {
-    return (
-      <SurvivalMonitor
-        onBack={() => setActiveModule("navigator")}
-      />
-    );
+    return withNav(<SurvivalMonitor onBack={() => setActiveModule("navigator")} />);
   }
 
   if (activeModule === "terrain") {
-    return (
-      <TerrainExplorer
-        onBack={() => setActiveModule("navigator")}
-      />
-    );
+    return withNav(<TerrainExplorer onBack={() => setActiveModule("navigator")} />);
   }
 
   if (activeModule === "analytics") {
-    return (
-      <RouteAnalytics
-        routeInfo={routeInfo}
-        priority={priority}
-        onBack={() => setActiveModule("navigator")}
-      />
-    );
+    return withNav(<RouteAnalytics routeInfo={routeInfo} priority={priority} onBack={() => setActiveModule("navigator")} />);
   }
 
   // ========================================
@@ -963,7 +960,7 @@ function App() {
                 {loading
                   ? "A* algorithm running"
                   : routeCalculated
-                    ? "Route generated by Python"
+                    ? "Route generated by A*"
                     : "Awaiting route request"}
               </small>
             </div>
@@ -1395,9 +1392,9 @@ function App() {
               <span className="online-dot"></span>
 
               {loading
-                ? "Calculating route using Python A* algorithm."
+                ? "Calculating route using A* algorithm."
                 : routeCalculated
-                  ? "A* route successfully calculated by Python backend."
+                  ? "A* route calculated in your browser."
                   : error
                     ? "Route calculation failed."
                     : "Waiting for navigation request."}

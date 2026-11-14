@@ -811,3 +811,6 @@
     padding: 20px;
   }
 }
+
+.chart-container { height: 300px; min-height: 300px; width: 100%; }
+.chart-card { overflow: hidden; }

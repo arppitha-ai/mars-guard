@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "./api";
+import NasaGallery from "./NasaGallery";
 import { useEffect, useMemo, useState } from "react";
 
 import {
@@ -55,6 +55,13 @@ const DEFAULT_READINGS = {
   wind: 20,
 };
 
+const LOC_READINGS = {
+  "Jezero Crater": { ...DEFAULT_READINGS, query: "Perseverance Jezero" },
+  "Olympus Mons": { temperature: -73, radiation: 0.75, pressure: 72, oxygen: 0.13, wind: 25, query: "Olympus Mons" },
+  "Gale Crater": { temperature: -60, radiation: 0.67, pressure: 750, oxygen: 0.13, wind: 18, query: "Curiosity Gale Crater" },
+  "Valles Marineris": { temperature: -55, radiation: 0.55, pressure: 900, oxygen: 0.13, wind: 15, query: "Valles Marineris" },
+};
+
 const HISTORY = [
   { time: "00:00", temperature: -58, radiation: 0.42 },
   { time: "04:00", temperature: -61, radiation: 0.48 },
@@ -70,42 +77,26 @@ function SurvivalMonitor({ onBack }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const fetchSurvivalData = async () => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await fetch(
-        `${API_BASE_URL}/api/survival`
-      );
-
-      if (!response.ok) {
-        throw new Error("Unable to retrieve survival data.");
-      }
-
-      const result = await response.json();
-
+  const fetchSurvivalData = () => {
+    setLoading(true);
+    setError("");
+    setTimeout(() => {
+      const b = LOC_READINGS[location];
+      const j = (x, p) => Number((x * (1 + (Math.random() - 0.5) * p)).toFixed(2));
       setReadings({
-        temperature:
-          result.temperature?.value ?? DEFAULT_READINGS.temperature,
-        radiation:
-          result.radiation?.value ?? DEFAULT_READINGS.radiation,
-        pressure:
-          result.pressure?.value ?? DEFAULT_READINGS.pressure,
-        oxygen:
-          result.oxygen?.value ?? DEFAULT_READINGS.oxygen,
-        wind: DEFAULT_READINGS.wind,
+        temperature: j(b.temperature, 0.06),
+        radiation: j(b.radiation, 0.1),
+        pressure: Math.round(j(b.pressure, 0.05)),
+        oxygen: b.oxygen,
+        wind: Math.round(j(b.wind, 0.3)),
       });
-    } catch (err) {
-      setError(err.message);
-    } finally {
       setLoading(false);
-    }
+    }, 400);
   };
 
   useEffect(() => {
     fetchSurvivalData();
-  }, []);
+  }, [location]);
 
   const updateReading = (name, value) => {
     setReadings((previous) => ({
@@ -349,25 +340,7 @@ function SurvivalMonitor({ onBack }) {
         </div>
       </section>
 
-      {/* NASA IMAGE GALLERY */}
-      <section className="nasa-gallery">
-        <div>
-          <p className="section-kicker">OFFICIAL NASA IMAGE COLLECTION</p>
-          <h2>Perseverance Rover Raw Images</h2>
-          <p>
-            Explore real photographs captured by NASA's
-            Perseverance rover on Mars.
-          </p>
-        </div>
-
-        <a
-          href="https://mars.nasa.gov/mars2020/multimedia/raw-images/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Open NASA Gallery <ExternalLink size={16} />
-        </a>
-      </section>
+      <NasaGallery key={location} initial={LOC_READINGS[location].query} />
 
       {/* ENVIRONMENTAL OVERVIEW */}
       <section id="survival-overview" className="survival-overview">
@@ -476,7 +449,7 @@ function SurvivalMonitor({ onBack }) {
             <p>Surface temperature (°C)</p>
 
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={280} minWidth={0}>
                 <LineChart data={historyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#34435b" />
                   <XAxis dataKey="time" stroke="#91a5c0" />
@@ -506,7 +479,7 @@ function SurvivalMonitor({ onBack }) {
             <p>Radiation exposure (mSv/day)</p>
 
             <div className="chart-container">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={280} minWidth={0}>
                 <LineChart data={historyData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#34435b" />
                   <XAxis dataKey="time" stroke="#91a5c0" />
@@ -664,7 +637,7 @@ max: 120000,            unit: "Pa",
 
         <button
           className="reset-readings"
-          onClick={() => setReadings(DEFAULT_READINGS)}
+          onClick={() => setReadings(LOC_READINGS[location])}
         >
           <RefreshCw size={16} />
           Reset Location Measurements

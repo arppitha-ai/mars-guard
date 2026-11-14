@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import NasaGallery from "./NasaGallery";
 import L from "leaflet";
 import {
   MapContainer,
@@ -32,9 +33,10 @@ const perseveranceSite = [18.4446, 77.4509];
 function FitImage() {
   const map = useMap();
 
-  useState(() => {
+  useEffect(() => {
+    map.invalidateSize();
     map.fitBounds(imageBounds);
-  });
+  }, [map]);
 
   return null;
 }
@@ -164,7 +166,7 @@ export default function TerrainExplorer({ onBack }) {
             scrollWheelZoom={true}
             style={{
               width: "100%",
-              height: "590px",
+              height: "clamp(420px, 72vh, 700px)",
               background: "#080d17",
               borderRadius: "8px",
             }}
@@ -305,6 +307,8 @@ export default function TerrainExplorer({ onBack }) {
           </p>
         </aside>
       </div>
+
+      <NasaGallery initial="Jezero Crater" />
 
       <p
         style={{
