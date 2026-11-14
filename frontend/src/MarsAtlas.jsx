@@ -9,6 +9,7 @@ import "leaflet/dist/leaflet.css";
 const WMS = "https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/mars_simp_cyl.map";
 const LAYERS = [
   { id: "MDIM21", label: "Viking mosaic (surface look)" },
+  { id: "MDIM21_color", label: "Viking colour (if available)" },
   { id: "THEMIS", label: "Thermal infrared, day (THEMIS)" },
   { id: "THEMIS_night", label: "Thermal infrared, night (THEMIS)" },
   { id: "MOLA_THEMIS_blend", label: "Elevation blend (MOLA + THEMIS)" },
@@ -112,9 +113,9 @@ export default function MarsAtlas() {
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 10 }}>
             {LAYERS.map((l) => <button key={l.id} onClick={() => setLayer(l)} style={chip(l.id === layer.id)}>{l.label}</button>)}
           </div>
-          <MapContainer crs={L.CRS.EPSG4326} center={[10, 180]} zoom={1} minZoom={0} maxZoom={8}
+          <MapContainer className="atlas-map" crs={L.CRS.EPSG4326} center={[10, 180]} zoom={1} minZoom={0} maxZoom={8}
             maxBounds={[[-90, 0], [90, 360]]} style={{ width: "100%", height: "clamp(420px, 66vh, 680px)", background: "#000", borderRadius: 10 }}>
-            <WMSTileLayer key={layer.id} url={WMS} layers={layer.id} format="image/jpeg" version="1.1.1" attribution="USGS Astrogeology / NASA" />
+            <WMSTileLayer key={layer.id} url={WMS} layers={layer.id} format="image/jpeg" version="1.1.1" detectRetina attribution="USGS Astrogeology / NASA" />
             <Fly target={sel} />
             <Picker onPick={(p) => { setPick(p); setSel(null); }} />
             {PLACES.map((p) => (
