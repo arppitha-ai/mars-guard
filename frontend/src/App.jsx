@@ -18,6 +18,7 @@ import {
   Map as MapIcon,
   Navigation,
   ShieldAlert,
+  Globe,
   Activity,
   Crosshair,
   Route,
@@ -733,9 +734,9 @@ const TABS = [
   ["analytics", "Route Analytics"],
 ];
 
-function TopNav({ active, onChange }) {
+function TopNav({ active, onChange, mobileOnly }) {
   return (
-    <nav style={{ position: "sticky", top: 0, zIndex: 2000, display: "flex", gap: 8, flexWrap: "wrap", padding: "10px 20px", background: "#0b1220", borderBottom: "1px solid #26364d" }}>
+    <nav className={mobileOnly ? "topnav-mobile" : undefined} style={{ position: "sticky", top: 0, zIndex: 2000, display: "flex", gap: 8, flexWrap: "wrap", padding: "10px 20px", background: "#0b1220", borderBottom: "1px solid #26364d" }}>
       <strong style={{ color: "#e87545", marginRight: 12, alignSelf: "center" }}>MARSGUARD</strong>
       {TABS.map(([key, label]) => (
         <button key={key} onClick={() => onChange(key)} style={{ padding: "8px 14px", borderRadius: 8, cursor: "pointer", color: "#fff", border: "1px solid #30415b", background: key === active ? "#e87545" : "#172235" }}>{label}</button>
@@ -853,6 +854,8 @@ function App() {
   // ========================================
 
   return (
+    <>
+    <TopNav active={activeModule} onChange={setActiveModule} mobileOnly />
     <div className="app">
 
       {/* SIDEBAR */}
@@ -897,6 +900,17 @@ function App() {
         >
           <Crosshair size={18} />
           <span>Terrain Explorer</span>
+        </div>
+
+        {/* MARS ATLAS */}
+
+        <div
+          className="side-item"
+          onClick={() => setActiveModule("atlas")}
+          style={{ cursor: "pointer" }}
+        >
+          <Globe size={18} />
+          <span>Mars Atlas</span>
         </div>
 
         {/* SURVIVAL MONITOR */}
@@ -1482,6 +1496,7 @@ function App() {
       </main>
 
     </div>
+    </>
   );
 }
 
