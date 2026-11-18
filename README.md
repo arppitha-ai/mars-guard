@@ -1,107 +1,86 @@
-# 🌍 Climate Trend Analyzer
+# MARS GUARD: Interplanetary Survival Guide (Martian Map)
 
-An end-to-end data science project that analyses decades of climate data (temperature, rainfall, humidity, CO₂, sea level) to uncover **long-term trends, seasonal patterns, anomalies and forecasts**, built with Python.
+A web-based crew map that helps astronauts decide where they can travel on Mars and whether conditions are safe. Built by **Team XELESTRA** for the NASA Space Apps Challenge 2026.
 
-> **Data note:** This project uses a *simulated* monthly dataset (1980-2024, 3 regions) with realistic seasonality, warming trends, noise, missing values and **injected anomalies**. Because the ground truth is known, detection quality can be measured honestly. The pipeline works unchanged with real CSVs (NASA GISTEMP, NOAA, Berkeley Earth, Our World in Data) once columns are mapped.
-
-## Problem statement
-Raw climate records are messy, seasonal and noisy. Analysts must separate the long-term signal (warming) from seasonality and noise, flag extreme events, and project the near future.
-
-## Industry relevance
-Environmental consulting, energy planning, agritech (crop/rainfall risk), insurance and public policy all rely on trend, anomaly and forecast analytics - the same workflow used by NASA, NOAA and IPCC-linked research.
-
-## Tech stack
-Python · pandas · NumPy · SciPy · statsmodels · scikit-learn · matplotlib · seaborn · Plotly · Streamlit · pytest
-
-## Pipeline
-```
-Simulated/real CSV -> Cleaning -> Feature engineering -> Trend analysis -> Anomaly detection -> Forecasting -> Charts, tables, report, dashboard
-```
-
-## Project structure
-```
-Climate-Trend-Analyzer/
-├── main.py                  # runs the whole pipeline
-├── app/streamlit_app.py     # interactive dashboard
-├── src/
-│   ├── config.py            # paths, seed, region parameters
-│   ├── data_simulation.py   # synthetic messy climate data
-│   ├── preprocessing.py     # quality report + cleaning
-│   ├── features.py          # seasons, rolling means, climatology, anomalies
-│   ├── trend_analysis.py    # OLS, Mann-Kendall, Sen's slope, correlations
-│   ├── anomaly_detection.py # robust z-score + Isolation Forest + evaluation
-│   ├── forecasting.py       # Holt-Winters + seasonal-naive baseline
-│   └── visualization.py     # all charts
-├── tests/test_pipeline.py
-├── data/raw | data/processed
-├── outputs/figures | outputs/tables
-├── reports/ | docs/ | notebooks/ | images/
-└── requirements.txt
-```
-
-## Installation
-```bash
-python -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-## How to run
-```bash
-python main.py                          # pipeline -> outputs/ and reports/
-streamlit run app/streamlit_app.py      # dashboard
-python -m pytest                        # tests
-```
-
-## Results (from a run of this repo)
-**Temperature trends** (annual means, 1980-2024):
-
-| Region | Warming (°C/decade) | R² | Mann-Kendall p | Significant |
-|---|---|---|---|---|
-| Central Plateau | 0.284 | 0.675 | 0.000000 | True |
-| Coastal South | 0.192 | 0.509 | 0.000004 | True |
-| North Plains | 0.241 | 0.53 | 0.000000 | True |
-
-- National CO₂ vs temperature correlation: **0.903** (annual means).
-- Rainfall trends were **not statistically significant** (p > 0.05) in any region - a deliberate, realistic result: not every variable shows a clear trend.
-
-**Anomaly detection** vs injected ground truth:
-
-| Method | Precision | Recall |
-|---|---|---|
-| flag_zscore | 0.894 | 0.875 |
-| flag_iforest | 0.524 | 0.229 |
-| flag_any | 0.764 | 0.875 |
-
-The seasonal robust z-score is the strongest method; Isolation Forest adds little on this data, so I report it honestly rather than hiding it. 
-
-**Forecasting** (Holt-Winters, 36-month holdout, MAE in °C):
-
-| Region | Holt-Winters MAE | Seasonal-naive MAE |
-|---|---|---|
-| Central Plateau | 0.623 | 0.929 |
-| Coastal South | 0.510 | 0.789 |
-| North Plains | 0.449 | 0.697 |
-
-Holt-Winters beat the seasonal-naive baseline in all three regions.
+**Live website:** https://arppitha-ai.github.io/mars-guard/
+**Presentation (7 slides):** [MARS_GUARD_XELESTRA_7_slides-1.pdf](MARS_GUARD_XELESTRA_7_slides-1.pdf)
 
 ## Screenshots
-![Temperature trend](outputs/figures/01_temperature_trend.png)
-![Rainfall trend](outputs/figures/02_rainfall_trend.png)
-![Seasonal pattern](outputs/figures/03_seasonal_pattern.png)
-![Anomalies](outputs/figures/05_anomaly_detection.png)
-![Decade comparison](outputs/figures/06_yearly_comparison.png)
-![CO2 vs temperature](outputs/figures/07_co2_vs_temperature.png)
-![Forecast - North Plains](outputs/figures/08_forecast_north_plains.png)
 
-### Dashboard
-![Dashboard](images/dashboard.png)
+| Route Navigator | Mars Atlas |
+|---|---|
+| ![Route Navigator](docs/screenshots/route-navigator.png) | ![Mars Atlas](docs/screenshots/mars-atlas.png) |
+| **Terrain Explorer** | **Survival Monitor** |
+| ![Terrain Explorer](docs/screenshots/terrain-explorer.png) | ![Survival Monitor](docs/screenshots/survival-monitor.png) |
 
-## Key learnings
-Handling missing/impossible values; separating trend from seasonality; Mann-Kendall and Sen's slope for non-parametric trends; why anomaly detection must be detrended and seasonal; honest evaluation with a baseline; modular project design.
+## What it does
 
-## Future improvements
-Real NASA/NOAA data · city-level forecasts · geospatial maps · live weather API · extreme-event return periods · climate risk scoring · pollution-climate links.
+Mars Guard has five tools:
 
-## Author
-**Your Name** · [LinkedIn](https://linkedin.com/in/your-profile) · [GitHub](https://github.com/your-username)
+- **Route Navigator**: pick a destination in Jezero Crater and a priority (maximum safety, balanced or shortest). An A* search finds a walking route that avoids rock fields, craters and steep slopes, then reports distance, walking time and risk level.
+- **Terrain Explorer**: detailed Jezero Crater imagery with a gallery of NASA photos (Perseverance, Curiosity, HiRISE), filtered by hazards, landing sites and science targets.
+- **Mars Atlas**: a whole-planet map with four layers (Viking surface imagery, THEMIS thermal infrared for day and night, and MOLA elevation) and 33 searchable places.
+- **Survival Monitor**: temperature, radiation, pressure, oxygen and wind readings, 24-hour trend charts and a safety decision (safe, caution or danger).
+- **Route Analytics**: distance, estimated travel time and risk level of the chosen route.
+
+To show the crew what to expect, a **hazard field guide** and a **destination preview** display real NASA photos of each hazard type and of the terrain at the destination.
+
+## Data layers
+
+| Layer | What it shows | Source |
+|---|---|---|
+| Optical | Surface imagery of Mars and Jezero Crater | NASA Viking mosaic and Mars 2020 CTX imagery, via USGS Astrogeology |
+| Thermal | Day and night infrared temperature patterns | NASA THEMIS, via USGS Astrogeology |
+| Topographic | Elevation relief | NASA MOLA, via USGS Astrogeology |
+| Radiation | Dose rate and solar particle event | Simulated for demonstration |
+| Atmospheric | Temperature, pressure, wind, oxygen | Simulated per location |
+
+## Data and resources
+
+- NASA Image and Video Library: https://images.nasa.gov
+- USGS Astrogeology Mars web map service (NASA Viking, THEMIS and MOLA data): https://planetarymaps.usgs.gov/cgi-bin/mapserv?map=/maps/mars/mars_simp_cyl.map
+- Mars 2020 Jezero Crater CTX orthorectified imagery (NASA, via USGS Astrogeology): https://astrogeology.usgs.gov
+
+## Built with
+
+React, Vite, JavaScript, HTML and CSS, Leaflet and React Leaflet (maps), Recharts (charts), Lucide Icons, an A* pathfinding algorithm that runs in the browser, GitHub Actions and GitHub Pages. An earlier Python/Flask version of the route search is included in the `backend` folder.
+
+## Run it on your computer
+
+You need Node.js installed.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open the address shown in the terminal (usually http://localhost:5173/mars-guard/).
+
+## Limitations
+
+- The hazard positions, the route grid, and the radiation and atmosphere readings are **simulated** for demonstration.
+- The surface, thermal and elevation layers and the photos are real NASA data, but the system does not use live rover sensor data.
+- Place coordinates in the Atlas are approximate.
+
+## Future work
+
+- Hazard maps built from real elevation and HiRISE data
+- The full list of official Mars place names (USGS Gazetteer)
+- Real radiation and space weather data
+- Suit-aware safety decisions (oxygen, battery, time outside)
+- Route planning anywhere on Mars and a helmet HUD view
+
+## Use of Super Intelligence (SI) tools
+
+AI assistants were used in this project. ChatGPT helped generate the first version of the website code, and Claude helped debug, extend and document it and prepare the presentation.
+
+- **Code:** the website and route-finding code were written with AI assistance and reviewed by the team.
+- **Data:** the hazard positions, route grid, radiation and atmosphere readings and the list of 33 places are simulated or approximate and were created with AI assistance.
+- **Text:** the project description and presentation were drafted with AI assistance.
+
+All Mars imagery and photos come from NASA and USGS sources and are not AI-generated. No NASA logos or branding were created or modified.
+
+## Team XELESTRA
+
+ARPPITHA R A, MANHA T J, ASWAL A S
